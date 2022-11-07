@@ -7,10 +7,10 @@ class User(db.Model, UserMixin):
   first_name = db.Column(db.String(60))
   email = db.Column(db.String(60), unique=True)
   password = db.Column(db.String(30))
-  note_id = db.relationship("Note")
+  notes = db.relationship("Note")
 
 class Note(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   text = db.Column(db.String(10000))
-  date = db.Column(db.DateTime, default=func.now)
+  date = db.Column(db.DateTime(timezone=True), default=func.now())
   user_id = db.Column(db.Integer, db.ForeignKey("user.id"))

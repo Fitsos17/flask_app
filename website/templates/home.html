@@ -1,5 +1,20 @@
 {% extends "base.html" %} 
 {% block title %}Home{% endblock %} 
 {% block content %}
-<h1>Hello from home!</h1>
+{% if user.notes %}
+{% for note in user.notes %}
+<div class="list-group mt-3">
+  <p align="left" class="list-item d-flex justify-content-between align-items-center">
+    <span>{{ note.text }}</span>
+    <button type="button" class="btn-close" onclick="deleteNote({{note.id}})"></button>
+  </p>
+</div>
+{% endfor %}
+{% endif %}
+
+<form method="POST">
+  <label for="note" class="form-labe mt-5">Enter note:</label>
+  <textarea id="note" name="note" class="form-control" rows="3"></textarea>
+  <button type="submit" class="btn btn-primary mt-2">Submit</button>
+</form>
 {% endblock %}
