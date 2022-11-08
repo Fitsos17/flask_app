@@ -18,26 +18,24 @@ def home():
 
   return render_template("home.html", user=current_user)
 
-@views.route("/delete-note", methods=["POST"])
-def delete_note():
-  note = json.loads(request.data)
-  note_id = note["id"]
-  note_to_delete = Note.query.get(note_id)
-  if note:
+@views.route("/delete-note-<int:id>")
+def delete_note(id):
+  note_to_delete = Note.query.get(id)
+  if id:
     if note_to_delete.user_id == current_user.id:
       db.session.delete(note_to_delete)
       db.session.commit()
+      return redirect(url_for("views.home"))
 
-  return jsonify({})
 
-@views.route("/edit-note", methods=["GET", "POST"])
-def edit_note():
-  # if request.method == "POST":
-  #   note = json.loads(request.data)
-    # note_id = note["id"]
-    # note_to_update = Note.query.get(note_id)
-    # if note_to_update.user_id == current_user.id:
-    #   db.session.delete(note_to_update)
-    #   db.session.commit()
 
-  return render_template("edit-note.html", user=current_user)
+@views.route("/edit-note-<int:id>", methods=["GET", "POST"])
+def edit_note(id):
+  note = Note.query.get(id)
+
+  if request.method == "POST":
+    new_note = request.form.get("new_note")
+    print(db.engine.execute(f'UPDATE Note SET text="{new_note}" WHERE id="{id}"'))
+    return redirect(url_for("views.home"))
+
+  return render_template("edit-note.html", user=current_user, current_note_text=note.text)
