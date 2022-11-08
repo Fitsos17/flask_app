@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<form method="POST" onsubmit="editNote()">
+  <label for="new_note" class="form-labe mt-5">Change note:</label>
+  <textarea id="new_note" name="new_note" class="form-control" rows="3"></textarea>
+  <button type="submit" class="btn btn-primary mt-2">Change</button>
+</form>
+{% endblock %}
